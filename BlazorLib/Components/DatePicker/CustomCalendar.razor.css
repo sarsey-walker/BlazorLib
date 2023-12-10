@@ -1,0 +1,46 @@
+
+.calendar-border {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+.calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid gray;
+    border-radius: 3%;
+}
+.w-calendar-header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    align-content: space-between;
+    width:100%;
+}
+.calendar button, .calendar input {
+    padding: 10px;
+}
+
+.calendar .days, .days-of-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+        
+}
+.day {
+    width: 36px;
+    height: 36px;
+    margin: 0 2px;
+}
+.selected-date {
+    background-color: #ff4081;
+    color: white;
+    border-radius: 50%;
+}
+.w-current-day {
+    color: white;
+    border-radius: 50%;
+    border: 1px solid #ff4081;
+}

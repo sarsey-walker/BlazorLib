@@ -1,0 +1,80 @@
+﻿@using System.Globalization
+
+@typeparam TValue
+
+<div class="form-group my-component">
+    <label>@Title</label>
+    <input type="text"
+           class="form-control"
+           value="@FormatValueAsString(Value)"
+           @onchange="@OnChange" />
+
+    <button @onclick="OpenCalendar">Open Calendar</button>
+</div>
+
+@if (showCalendar)
+{
+    <CustomCalendar SelectedDate="@Value" SelectedDateChanged="@((TValue? date) => Value = date!)" />
+}
+
+@code {
+    private const string DateFormat = "yyyy-MM-dd";
+    CultureInfo provider = CultureInfo.InvariantCulture;
+    private TValue _value;
+    [Parameter] public string? Title { get; set; }
+    [Parameter]
+    public TValue Value
+    {
+        get
+        {
+            return _value;
+        }
+        set
+        {
+            if (EqualityComparer<TValue>.Default.Equals(value, _value))
+            {
+                return;
+            }
+            _value = value;
+            ValueChanged.InvokeAsync(value);
+        }
+    }
+
+    [Parameter] public EventCallback<TValue> ValueChanged { get; set; }
+    private void OnChange(ChangeEventArgs args)
+    {
+        try
+        {
+            Value =(TValue)(object)DateTime
+                .ParseExact(args.Value!.ToString()!, DateFormat, provider);
+        }
+        catch
+        {
+            Value = default(TValue)!;
+        }
+    }
+    protected string FormatValueAsString(TValue? value)
+    {
+        switch (value)
+        {
+            case DateTime dateTimeValue:
+                var r = BindConverter.FormatValue(dateTimeValue, DateFormat, provider);
+                return r;
+            default:
+                return string.Empty;
+        }
+    }
+
+
+    private bool showCalendar = false;
+    private void OpenCalendar()
+    {
+        showCalendar = !showCalendar;
+    }
+
+    private void OnDateSelected(TValue date)
+    {
+        Value = date;
+        showCalendar = false;
+    }
+}
