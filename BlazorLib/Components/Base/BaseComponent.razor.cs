@@ -2,7 +2,7 @@
 
 namespace BlazorLib.Components.Base
 {
-    public partial class BaseComponent
+    public class BaseComponent<T> : ComponentBase
     {
         [Parameter]
         public string? Style { get; set; }
