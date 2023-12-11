@@ -1,4 +1,7 @@
-﻿@typeparam TValue
+﻿@using System.Globalization
+@using BlazorLib.Components.Form
+
+@inherits FormBaseComponent<DateTime?>
 
 <div class="calendar-border">
     <div class="calendar">
@@ -7,7 +10,7 @@
                 <WIcon Icon="@Icon.ChevronLeft" Width="36px" Height="36px"  />
             </button>
 
-            <div>@currentMonth.ToString("MMMM") @currentYear</div>
+            <div>@(char.ToUpper(currentMonth.ToString("MMMM")[0], CultureInfo.CurrentCulture) + currentMonth.ToString("MMMM").Substring(1)) @currentYear</div>
             
             <button @onclick="NextMonth">
                 <WIcon Icon="@Icon.ChevronRight" Style="width:36px; height:36px" />
@@ -15,9 +18,9 @@
         </div>
 
         <div class="days-of-week">
-            @foreach (var day in daysOfWeek)
+            @foreach (var day in GetAbbreviatedDayNames())
             {
-                <div class="day">@day</div>
+                <div class="day">@(char.ToUpper(day[0], CultureInfo.CurrentCulture) + day.Substring(1))</div>
             }
         </div>
         <div class="days">
@@ -26,8 +29,12 @@
                 int currentDay = i;
                 @if (days[currentDay] != DateTime.MinValue)
                 {
+                    if (MarkedDays == null)
+                    {
+                        MarkedDays = new List<int>();
+                    }
                     <button @onclick="(onClickEvent) => SelectDate(currentDay)"
-                            class="@(currentDay == SelectedDateIndex ? "selected-date" : "") day @GetDayClasses(days[currentDay])">
+                            class="@(days[currentDay] == Date ? "selected-date" : "") day @GetDayClasses(days[currentDay]) @(MarkedDays.Contains(days[currentDay].Day) ? "w-event" : "")">
                         @days[currentDay].Day
                     </button>
                 }
@@ -39,69 +46,4 @@
         </div>
     </div>
 
-
 </div>
-
-@code {
-    private DateTime currentDate = DateTime.Today;
-    private DateTime currentMonth => new DateTime(currentDate.Year, currentDate.Month, 1);
-    private int currentYear => currentMonth.Year;
-    private int daysInMonth => DateTime.DaysInMonth(currentYear, currentMonth.Month);
-
-    private int SelectedDateIndex { get; set; }
-    private string[] daysOfWeek = new string[] { "Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab" };
-    private List<DateTime> days = null!;
-
-    [Parameter] public TValue SelectedDate { get; set; } = default(TValue)!;
-    [Parameter] public EventCallback<TValue> SelectedDateChanged { get; set; }
-
-    protected override void OnInitialized()
-    {
-        UpdateDays();
-    }
-
-
-    private void UpdateDays()
-    {
-        days = new List<DateTime>();
-        int firstDayOfWeek = (int)currentMonth.DayOfWeek;
-        for (int i = 0; i < firstDayOfWeek; i++)
-        {
-            days.Add(DateTime.MinValue);
-        }
-        for (int i = 0; i < daysInMonth; i++)
-        {
-            days.Add(new DateTime(currentYear, currentMonth.Month, i + 1));
-        }
-        SelectedDateIndex = days.IndexOf(DateTime.Today);
-    }
-
-
-    private async void SelectDate(int index)
-    {
-        SelectedDate = (TValue)(object)days[index];
-        SelectedDateIndex = index;
-        await SelectedDateChanged.InvokeAsync(SelectedDate);
-    }
-
-    private void PreviousMonth()
-    {
-        currentDate = currentDate.AddMonths(-1);
-        UpdateDays();
-    }
-
-    private void NextMonth()
-    {
-        currentDate = currentDate.AddMonths(1);
-        UpdateDays();
-    }
-
-    private string GetDayClasses(DateTime day)
-    {
-        if (day == DateTime.Today)
-        {
-            return "w-current-day";
-        }
-        return "";
-    }
-}

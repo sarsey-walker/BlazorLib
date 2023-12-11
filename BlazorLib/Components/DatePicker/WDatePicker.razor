@@ -1,7 +1,5 @@
 ﻿@using System.Globalization
 
-@typeparam TValue
-
 <div class="form-group my-component">
     <label>@Title</label>
     <input type="text"
@@ -14,16 +12,26 @@
 
 @if (showCalendar)
 {
-    <CustomCalendar SelectedDate="@Value" SelectedDateChanged="@((TValue? date) => Value = date!)" />
+    <CustomCalendar 
+        Date="@Value" 
+        SelectedDateChanged="@((DateTime? date) => Value = date.Value)"
+                    MonthChanged="@((DateTime? date) => {newMonth = date.Value; dias = new List<int>(){random.Next(30)};})"
+                    MarkedDays="dias" />
 }
 
 @code {
     private const string DateFormat = "yyyy-MM-dd";
     CultureInfo provider = CultureInfo.InvariantCulture;
-    private TValue _value;
+    private DateTime _value;
+    private DateTime newMonth;
+    private List<int> dias;
+
+    private Random random = new Random();
+
+
     [Parameter] public string? Title { get; set; }
     [Parameter]
-    public TValue Value
+    public DateTime Value
     {
         get
         {
@@ -31,7 +39,8 @@
         }
         set
         {
-            if (EqualityComparer<TValue>.Default.Equals(value, _value))
+            
+            if (EqualityComparer<DateTime>.Default.Equals(value, _value))
             {
                 return;
             }
@@ -40,20 +49,20 @@
         }
     }
 
-    [Parameter] public EventCallback<TValue> ValueChanged { get; set; }
+    [Parameter] public EventCallback<DateTime> ValueChanged { get; set; }
     private void OnChange(ChangeEventArgs args)
     {
         try
         {
-            Value =(TValue)(object)DateTime
+            Value = (DateTime)(object)DateTime
                 .ParseExact(args.Value!.ToString()!, DateFormat, provider);
         }
         catch
         {
-            Value = default(TValue)!;
+            Value = default(DateTime)!;
         }
     }
-    protected string FormatValueAsString(TValue? value)
+    protected string FormatValueAsString(DateTime? value)
     {
         switch (value)
         {
@@ -72,7 +81,7 @@
         showCalendar = !showCalendar;
     }
 
-    private void OnDateSelected(TValue date)
+    private void OnDateSelected(DateTime date)
     {
         Value = date;
         showCalendar = false;

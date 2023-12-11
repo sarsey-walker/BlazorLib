@@ -44,3 +44,13 @@
     border-radius: 50%;
     border: 1px solid #ff4081;
 }
+.w-event::after {
+    content: "";
+    width: 5px;
+    height: 5px;
+    background: #ff4081;
+    position: absolute;
+    bottom: 4px;
+    border-radius: 50%;
+    right: 15px;
+}
