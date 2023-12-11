@@ -32,10 +32,10 @@
                 {
                     if (MarkedDays == null)
                     {
-                        MarkedDays = new List<int>();
+                        MarkedDays = new List<DateTime>();
                     }
                     <button @onclick="(onClickEvent) => SelectDate(currentDay)"
-                            class="@(days[currentDay] == Date ? "selected-date" : "") day @GetDayClasses(days[currentDay]) @(MarkedDays.Contains(days[currentDay].Day) ? "w-event" : "")">
+                            class="@(days[currentDay] == Date ? "selected-date" : "") day @GetDayClasses(days[currentDay]) @(MarkedDays.Contains(days[currentDay]) ? "w-markedday" : "")">
                         @days[currentDay].Day
                     </button>
                 }

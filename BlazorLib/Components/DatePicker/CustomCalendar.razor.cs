@@ -23,17 +23,24 @@ namespace BlazorLib.Components.DatePicker
         [Parameter]
         public DayOfWeek? FirstDayOfWeek { get; set; } = null;
 
+        /// <summary>
+        /// Fired when the DateFormat changes.
+        /// </summary>
+        [Parameter] 
+        public EventCallback<DateTime?> SelectedDateChanged { get; set; }
+
+        /// <summary>
+        /// If you want do mark some days, pass they here.
+        /// </summary>
+        [Parameter]
+        public IEnumerable<DateTime>? MarkedDays { get; set; }
+
         private DateTime currentDate = DateTime.Today;
         private DateTime currentMonth => new DateTime(currentDate.Year, currentDate.Month, 1);
         private int currentYear => currentMonth.Year;
         private int daysInMonth => DateTime.DaysInMonth(currentYear, currentMonth.Month);
 
         private List<DateTime> days = null!;
-
-        [Parameter] public EventCallback<DateTime?> SelectedDateChanged { get; set; }
-        [Parameter] public EventCallback<DateTime?> MonthChanged { get; set; }
-        [Parameter] public List<int>? MarkedDays { get; set; }
-
 
         protected override void OnInitialized()
         {
@@ -43,7 +50,6 @@ namespace BlazorLib.Components.DatePicker
             }
             UpdateDays();
         }
-
 
         private void UpdateDays()
         {
@@ -69,14 +75,14 @@ namespace BlazorLib.Components.DatePicker
         private void PreviousMonth()
         {
             currentDate = currentDate.AddMonths(-1);
-            MonthChanged.InvokeAsync(currentDate);
+            SelectedDateChanged.InvokeAsync(currentDate);
             UpdateDays();
         }
 
         private void NextMonth()
         {
             currentDate = currentDate.AddMonths(1);
-            MonthChanged.InvokeAsync(currentDate);
+            SelectedDateChanged.InvokeAsync(currentDate);
             UpdateDays();
         }
 

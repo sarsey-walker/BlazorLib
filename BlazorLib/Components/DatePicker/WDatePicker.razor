@@ -15,7 +15,7 @@
     <CustomCalendar 
         Date="@Value" 
         SelectedDateChanged="@((DateTime? date) => Value = date.Value)"
-                    MonthChanged="@((DateTime? date) => {newMonth = date.Value; dias = new List<int>(){random.Next(30)};})"
+                    MonthChanged="@((DateTime? date) => {newMonth = date.Value; dias = new List<DateTime>(){new DateTime(date.Value.Year,date.Value.Month, random.Next(30))};})"
                     MarkedDays="dias" />
 }
 
@@ -24,7 +24,7 @@
     CultureInfo provider = CultureInfo.InvariantCulture;
     private DateTime _value;
     private DateTime newMonth;
-    private List<int> dias;
+    private List<DateTime> dias;
 
     private Random random = new Random();
 

@@ -44,7 +44,7 @@
     border-radius: 50%;
     border: 1px solid #ff4081;
 }
-.w-event::after {
+.w-markedday::after {
     content: "";
     width: 5px;
     height: 5px;
