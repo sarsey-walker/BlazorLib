@@ -1,12 +1,10 @@
-﻿using BlazorLib.Components.Base;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using System.Globalization;
 using BlazorLib.Components.Form;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BlazorLib.Components.DatePicker
 {
-    public partial class CustomCalendar : FormBaseComponent<DateTime?>
+    public partial class CustomCalendar : WFormBaseComponent<DateTime?>
     {
 
         /// <summary>

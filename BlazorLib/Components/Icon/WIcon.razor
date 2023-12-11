@@ -1,4 +1,4 @@
-﻿@inherits BaseComponent
+﻿@inherits WBaseComponent
 
 @if (!string.IsNullOrEmpty(Icon) && Icon.Trim().StartsWith("<"))
 {
@@ -13,22 +13,31 @@
 }
 else
 {
-    <span @attributes="UserAttributes" class="@($"{Classname} {Icon}") " width="@Width" height="@Height"  style="display:inline-block;color: @($"{Color};{Style}")" title="@Title" />
+    <span @attributes="UserAttributes" class="@($"{Class} {Icon}") " width="@Width" height="@Height"  style="display:inline-block;color: @($"{Color};{Style}")" title="@Title" />
 }
 
 @code {
+    /// <summary>
+    /// The color of the component. CSS values
+    /// </summary>
     [Parameter]
     public string? Color { get; set; } = "#fff";
+    /// <summary>
+    /// Title of the icon used for accessibility.
+    /// </summary>
     [Parameter]
     public string? Title { get; set; }
+
+    /// <summary>
+    /// Icon to be used can either be svg paths for font icons.
+    /// </summary>
     [Parameter]
     public string? Icon { get; set; }
+
     [Parameter]
     public string? Width { get; set; }
     [Parameter]
     public string? Height { get; set; }
-    [Parameter]
-    public string? Classname { get; set; }
     [Parameter]
     public IEnumerable<KeyValuePair<string, object>>? UserAttributes { get; set; }
 }
