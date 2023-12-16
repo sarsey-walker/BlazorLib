@@ -1,65 +1,59 @@
 ﻿@using System.Globalization
 
-<div class="form-group my-component">
-    <label>@Title</label>
-    <input type="text"
-           class="form-control"
-           value="@FormatValueAsString(Value)"
-           @onchange="@OnChange" />
+@inherits WBaseDate
 
-    <button @onclick="OpenCalendar">Open Calendar</button>
+<div class="w-input-control-container" @onclick="OpenCalendar">
+    <div class="w-input w-input-text w-input-underline">
+        <input class="w-input-slot w-input-root w-input-root-text w-input-root-adorned-end"
+               type="text" inputmode="text"
+               @onchange="@OnChange"
+               value="@FormatValueAsString(Date)">
+
+        <div>
+            <button aria-label="Open Date Picker" tabindex="-1" type="button"
+                    class="w-button-root w-icon-button w-ripple w-ripple-icon w-icon-button-edge-end">
+                <span class="w-icon-button-label">
+                    <WIcon Icon="@Icon.Event"Color="red"/>
+                </span>
+            </button>
+        </div>
+    </div>
+    <label class="w-input-label w-input-label-animated w-input-label-text">@Title</label>
 </div>
-
 @if (showCalendar)
 {
-    <CustomCalendar 
-        Date="@Value" 
-        SelectedDateChanged="@((DateTime? date) => Value = date.Value)"
-                    MonthChanged="@((DateTime? date) => {newMonth = date.Value; dias = new List<DateTime>(){new DateTime(date.Value.Year,date.Value.Month, random.Next(30))};})"
-                    MarkedDays="dias" />
+    <CustomCalendar Date="@Date"
+                    DateFormat="@DateFormat"
+                    FirstDayOfWeek="@FirstDayOfWeek"
+                    DateChanged="@DateChanged"
+                    MonthChanged="@MonthChanged"
+                    MarkedDays="MarkedDays"
+                    Class="@Class"
+                    Style="@Style" />
 }
 
 @code {
-    private const string DateFormat = "yyyy-MM-dd";
     CultureInfo provider = CultureInfo.InvariantCulture;
-    private DateTime _value;
-    private DateTime newMonth;
-    private List<DateTime> dias;
-
-    private Random random = new Random();
-
 
     [Parameter] public string? Title { get; set; }
-    [Parameter]
-    public DateTime Value
-    {
-        get
-        {
-            return _value;
-        }
-        set
-        {
-            
-            if (EqualityComparer<DateTime>.Default.Equals(value, _value))
-            {
-                return;
-            }
-            _value = value;
-            ValueChanged.InvokeAsync(value);
-        }
-    }
 
-    [Parameter] public EventCallback<DateTime> ValueChanged { get; set; }
-    private void OnChange(ChangeEventArgs args)
+    private Task OnChange(ChangeEventArgs args)
     {
         try
         {
-            Value = (DateTime)(object)DateTime
-                .ParseExact(args.Value!.ToString()!, DateFormat, provider);
+            var date = args?.Value?.ToString();
+            if (date != null)
+            {
+                Date = DateTime.ParseExact(date!, DateFormat, provider);
+                DateChanged.InvokeAsync(Date);
+            }
+            return Task.CompletedTask;
         }
         catch
         {
-            Value = default(DateTime)!;
+            Date = default(DateTime)!;
+            DateChanged.InvokeAsync(Date);
+            return Task.CompletedTask;
         }
     }
     protected string FormatValueAsString(DateTime? value)
@@ -74,16 +68,9 @@
         }
     }
 
-
-    private bool showCalendar = false;
+    private bool showCalendar = true;
     private void OpenCalendar()
     {
         showCalendar = !showCalendar;
-    }
-
-    private void OnDateSelected(DateTime date)
-    {
-        Value = date;
-        showCalendar = false;
     }
 }

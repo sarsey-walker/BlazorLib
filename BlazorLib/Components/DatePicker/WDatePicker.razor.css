@@ -1,11 +1,117 @@
-﻿.my-component {
-    border: 2px solid red;
-    padding: 1em;
-    margin: 1em 0;
-    background-color: forestgreen;
+﻿.w-input-control-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
-.form-control {
-    height: 40px;
-    font-size: 20px;
-    background-color: aqua;
+
+.w-input {
+    position: relative;
+    color: #f00;
+    cursor: text;
+    display: inline-flex;
+    font-size: 1rem;
+    box-sizing: border-box;
+    align-items: center;
+    font-weight: 400;
+    line-height: 1.1876em;
+    letter-spacing: .00938em;
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+.w-input-control-container > .w-input .w-input-text {
+    margin-top: 16px;
+    cursor:pointer;
+}
+.w-input.w-input-underline::before {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: " ";
+    position: absolute;
+    transition: border-bottom .2s,background-color .2s;
+    border-bottom: 1px solid red;
+    pointer-events: none;
+}
+.w-input.w-input-underline::after {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: "";
+    position: absolute;
+    transform: scaleX(0);
+    transition: transform 200ms cubic-bezier(0,0,.2,1) 0ms;
+    border-bottom: 2px solid green;
+    pointer-events: none;
+}
+.w-input:focus-within.w-input-underline::after {
+    transform: scaleX(1);
+}
+.w-input > .w-input-root {
+    font: inherit;
+    color: currentColor;
+    width: 100%;
+    border: 0;
+    height: 1.1876em;
+    margin: 0;
+    display: block;
+    padding: 6px 0 7px;
+    min-width: 0;
+    background: none;
+    position: relative;
+    box-sizing: content-box;
+    letter-spacing: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+.w-input > input.w-input-root:focus{
+    outline:0;
+}
+.w-icon-button {
+    padding: 12px;
+    overflow: visible;
+    font-size: 1.5rem;
+    text-align: center;
+    transition: background-color 150ms cubic-bezier(.4,0,.2,1) 0ms;
+    border-radius: 50%;
+    color: forestgreen;
+}
+.w-icon-button-label {
+    width: 100%;
+    display: flex;
+    align-items: inherit;
+    justify-content: inherit;
+}
+.w-picker-inline.w-picker-input-button .w-input .w-input-root {
+    cursor: pointer;
+    font: inherit;
+    color: currentColor;
+    width: 100%;
+    border: 0;
+    height: 1.1876em;
+    margin: 0;
+    display: block;
+    padding: 6px 0 7px;
+    min-width: 0;
+    background: none;
+    position: relative;
+    box-sizing: content-box;
+    letter-spacing: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+label.w-input-label {
+    display:block;
+    transform: translate(0,1.5px) scale(.75);
+    transform-origin: top left;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: .00938em;
+    z-index: 0;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    position: absolute;
+    transition: color 200ms cubic-bezier(0,0,.2,1) 0ms,transform 200ms cubic-bezier(0,0,.2,1) 0ms;
+    
 }
