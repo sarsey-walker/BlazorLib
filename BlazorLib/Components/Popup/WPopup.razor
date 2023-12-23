@@ -1,0 +1,34 @@
+﻿@if (IsVisible)
+{
+    <div @ref="@popupElement" class="popup" @onfocusout="Close" tabindex="0">
+        <div class="popup-content">
+            <span class="close" @onclick="Close">&times;</span>
+            <p>@ChildContent</p>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> IsVisibleChanged { get; set; }
+
+    private ElementReference popupElement;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        popupElement.FocusAsync();
+        base.OnAfterRender(firstRender);
+    }
+
+    private async Task Close()
+    {
+        IsVisible = false;
+        await IsVisibleChanged.InvokeAsync(IsVisible);
+    }
+}
