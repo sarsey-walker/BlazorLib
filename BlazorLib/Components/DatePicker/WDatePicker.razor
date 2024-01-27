@@ -2,24 +2,27 @@
 
 @inherits WBaseDate
 
-<div class="w-input-control-container" @onclick="OpenCalendar">
-    <div class="w-input w-input-text w-input-underline">
-        <input class="w-input-slot w-input-root w-input-root-text w-input-root-adorned-end"
-               type="text" inputmode="text"
-               @onchange="@OnChange"
-               value="@FormatValueAsString(Date)">
+@if (ShowInput)
+{
+    <div class="w-input-control-container">
+        <div class="w-input w-input-text w-input-underline">
+            <input class="w-input-slot w-input-root w-input-root-text w-input-root-adorned-end"
+                   type="text" inputmode="text"
+                   @onchange="@OnChange"
+                   value="@FormatValueAsString(Date)">
 
-        <div>
-            <button aria-label="Open Date Picker" tabindex="-1" type="button"
-                    class="w-button-root w-icon-button w-ripple w-ripple-icon w-icon-button-edge-end">
-                <span class="w-icon-button-label">
-                    <WIcon Icon="@Icon.Event"Color="red"/>
-                </span>
-            </button>
+            <div>
+                <button aria-label="Open Date Picker" tabindex="-1" type="button"
+                        class="w-button-root w-icon-button w-ripple w-ripple-icon w-icon-button-edge-end">
+                    <span class="w-icon-button-label">
+                        <WIcon Icon="@Icon.Event" Color="red" />
+                    </span>
+                </button>
+            </div>
         </div>
+        <label class="w-input-label w-input-label-animated w-input-label-text">@Title</label>
     </div>
-    <label class="w-input-label w-input-label-animated w-input-label-text">@Title</label>
-</div>
+}
 @if (showCalendar)
 {
     <CustomCalendar Date="@Date"
@@ -36,6 +39,7 @@
     CultureInfo provider = CultureInfo.InvariantCulture;
 
     [Parameter] public string? Title { get; set; }
+    [Parameter] public bool ShowInput { get; set; } = false;
 
     private Task OnChange(ChangeEventArgs args)
     {

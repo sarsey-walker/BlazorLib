@@ -8,6 +8,6 @@ namespace BlazorLib.Components.Form
         /// <summary>
         /// This is the component's value.
         /// </summary>
-        protected TValue? _value;
+        protected static TValue? _value;
     }
 }
