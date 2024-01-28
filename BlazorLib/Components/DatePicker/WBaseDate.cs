@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace BlazorLib.Components.DatePicker
 {
-    public class WBaseDate : WFormBaseComponent<DateTime?>
+    public partial class WBaseDate : WFormBaseComponent<DateTime?>
     {
 
         /// <summary>

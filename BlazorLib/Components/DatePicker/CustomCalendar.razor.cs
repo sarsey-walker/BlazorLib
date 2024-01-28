@@ -1,20 +1,40 @@
-﻿using System.Globalization;
+﻿using BlazorLib.Enums;
+using Microsoft.AspNetCore.Components;
+using System.Globalization;
 
 namespace BlazorLib.Components.DatePicker
 {
     public partial class CustomCalendar : WBaseDate
     {
-
+        [Parameter] public bool Fill { get; set; } = false;
         private DateTime currentDate = DateTime.Today;
         private DateTime currentMonth => new(currentDate.Year, currentDate.Month, 1);
         private int currentYear => currentMonth.Year;
         private int daysInMonth => DateTime.DaysInMonth(currentYear, currentMonth.Month);
 
         private List<DateTime> days = new List<DateTime>();
+        private string CalendarClass()
+        {
+            return Fill ? "calendar-border-fill" : "calendar-border-fit";
+        }
+        private SwipeDirection _swipeDirection = SwipeDirection.None;
 
+        private void OnSwiped(SwipeDirection swipeDirection)
+        {
+            _swipeDirection = swipeDirection;
+
+            if (_swipeDirection == SwipeDirection.RightToLeft)
+            {
+                NextMonth();
+            }
+            else if(_swipeDirection == SwipeDirection.LeftToRight)
+            {
+                PreviousMonth();
+            }
+        }
         protected override void OnInitialized()
         {
-            if(Date ==  null)
+            if (Date == null)
             {
                 Date = DateTime.Today;
             }

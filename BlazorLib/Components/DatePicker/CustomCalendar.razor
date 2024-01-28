@@ -1,49 +1,54 @@
 ﻿@using System.Globalization
 @using BlazorLib.Components.Form
+@using BlazorLib.Components.Swipe
 
 @inherits WBaseDate
 
-<div class="calendar-border">
-    <div class="calendar">
-        <div class="w-calendar-header">
-            <button @onclick="PreviousMonth">
-                <WIcon Icon="@Icon.ChevronLeft" Width="36px" Height="36px"  />
-            </button>
+<div class="@CalendarClass()">
 
-            <div>@(char.ToUpper(currentMonth.ToString("MMMM")[0], CultureInfo.CurrentCulture) + currentMonth.ToString("MMMM").Substring(1)) @currentYear</div>
-            
-            <button @onclick="NextMonth">
-                <WIcon Icon="@Icon.ChevronRight" Style="width:36px; height:36px" />
-            </button>
-        </div>
+    <WSwipeArea OnSwipe="OnSwipped">
+        <div class="calendar">
+            <div class="w-calendar-header">
+                <button @onclick="PreviousMonth">
+                    <WIcon Icon="@Icon.ChevronLeft" Width="36px" Height="36px" />
+                </button>
 
-        <div class="days-of-week">
-            @foreach (var day in GetAbbreviatedDayNames())
-            {
-                <div class="day">@(char.ToUpper(day[0], CultureInfo.CurrentCulture) + day.Substring(1))</div>
-            }
-        </div>
-        <div class="days">
-            @for (int i = 0; i < days.Count; i++)
-            {
-                int currentDay = i;
-                @if (days[currentDay] != DateTime.MinValue)
+                <div>@(char.ToUpper(currentMonth.ToString("MMMM")[0], CultureInfo.CurrentCulture) + currentMonth.ToString("MMMM").Substring(1)) @currentYear</div>
+
+                <button @onclick="NextMonth">
+                    <WIcon Icon="@Icon.ChevronRight" Style="width:36px; height:36px" />
+                </button>
+            </div>
+
+            <div class="days-of-week">
+                @foreach (var day in GetAbbreviatedDayNames())
                 {
-                    if (MarkedDays == null)
+                    <div class="day">@(char.ToUpper(day[0], CultureInfo.CurrentCulture) + day.Substring(1))</div>
+                }
+            </div>
+            <div class="days">
+                @for (int i = 0; i < days.Count; i++)
+                {
+                    int currentDay = i;
+                    @if (days[currentDay] != DateTime.MinValue)
                     {
-                        MarkedDays = new List<DateTime>();
+                        if (MarkedDays == null)
+                        {
+                            MarkedDays = new List<DateTime>();
+                        }
+                        <button @onclick="(onClickEvent) => SelectDate(currentDay)"
+                                class="@(days[currentDay] == Date ? "selected-date" : "") day @GetDayClasses(days[currentDay]) @(MarkedDays.Contains(days[currentDay]) ? "w-markedday" : "")">
+                            @days[currentDay].Day
+                        </button>
                     }
-                    <button @onclick="(onClickEvent) => SelectDate(currentDay)"
-                            class="@(days[currentDay] == Date ? "selected-date" : "") day @GetDayClasses(days[currentDay]) @(MarkedDays.Contains(days[currentDay]) ? "w-markedday" : "")">
-                        @days[currentDay].Day
-                    </button>
+                    else
+                    {
+                        <span></span>
+                    }
                 }
-                else
-                {
-                    <span></span>
-                }
-            }
+            </div>
         </div>
-    </div>
+
+    </WSwipeArea>
 
 </div>
