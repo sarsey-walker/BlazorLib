@@ -3,11 +3,13 @@
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
+    min-width: 285px;
 }
 .calendar-border-fill {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    min-width: 285px;
 }
 .calendar {
     display: flex;
@@ -53,7 +55,7 @@
     content: "";
     width: 5px;
     height: 5px;
-    background: #ff4081;
+    background: #d6ff00;
     position: absolute;
     bottom: 4px;
     border-radius: 50%;
